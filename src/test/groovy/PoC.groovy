@@ -15,6 +15,13 @@ class PoC {
     void test() {
         def expectedFile = new File("$tempDir/expected.wav")
         def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
-        MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
+        def expected = MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
+        def proc = 'flac -d test.flac'.execute(null, tempDir)
+        proc.waitFor()
+        def actualFile = new File("$tempDir/test.wav")
+        assert actualFile.exists()
+        def actualAIS = AudioSystem.getAudioInputStream(actualFile)
+        def actual = MaryAudioUtils.getSamplesAsDoubleArray(actualAIS)
+        assert expected == actual
     }
 }
