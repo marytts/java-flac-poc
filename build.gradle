@@ -9,8 +9,16 @@ repositories {
 dependencies {
     compile localGroovy()
     testCompile 'org.testng:testng:6.9.10'
+    testCompile 'de.dfki.mary:marytts-signalproc:5.1.2'
 }
 
 test {
     useTestNG()
+    systemProperty 'tempDir', temporaryDir
+    doFirst {
+        copy {
+            from sourceSets.test.output.resourcesDir
+            into temporaryDir
+        }
+    }
 }
