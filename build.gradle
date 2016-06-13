@@ -12,6 +12,24 @@ dependencies {
     testCompile 'de.dfki.mary:marytts-signalproc:5.1.2'
 }
 
+sourceSets {
+    main {
+        groovy {
+            srcDir 'src/main/groovy'
+        }
+    }
+
+    test {
+        groovy{
+            srcDir 'src/test/groovy'
+        }
+
+        resources{
+            srcDir 'src/test/resources'
+        }
+    }
+}
+
 test {
     useTestNG()
     testLogging {
@@ -24,4 +42,8 @@ test {
             into temporaryDir
         }
     }
+    afterTest {
+        test, result -> println "Executing test ${test.name} [${test.className}] with result: ${result.resultType}"
+    }
+
 }
