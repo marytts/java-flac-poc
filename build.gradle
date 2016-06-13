@@ -14,6 +14,9 @@ dependencies {
 
 test {
     useTestNG()
+    testLogging {
+        exceptionFormat = 'full'
+    }
     systemProperty 'tempDir', temporaryDir
     doFirst {
         copy {
