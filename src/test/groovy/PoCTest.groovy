@@ -1,8 +1,9 @@
+import org.codehaus.groovy.runtime.powerassert.PowerAssertionError
 import org.testng.annotations.*
 import marytts.util.data.audio.MaryAudioUtils
 import javax.sound.sampled.AudioSystem
 
-class PoC {
+class PoCTest {
 
     def tempDir
 
@@ -11,8 +12,18 @@ class PoC {
         tempDir = new File(System.getProperty('tempDir'))
     }
 
+    @Test(expectedExceptions = PowerAssertionError.class)
+    void testDecoding() {
+        def expectedFile = new File("$tempDir/expected.wav")
+        def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
+        def expected = MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
+        def poc = new PoC(expectedFile)
+        def actual = poc.samples
+        assert expected == actual
+    }
+
     @Test
-    void test() {
+    void testDecodingExternal() {
         def expectedFile = new File("$tempDir/expected.wav")
         def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
         def expected = MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
