@@ -2,7 +2,7 @@ import org.testng.annotations.*
 import marytts.util.data.audio.MaryAudioUtils
 import javax.sound.sampled.AudioSystem
 
-class PoC {
+class PoCTest {
 
     def tempDir
 
@@ -12,7 +12,17 @@ class PoC {
     }
 
     @Test
-    void test() {
+    void testDecoding() {
+        def expectedFile = new File("$tempDir/expected.wav")
+        def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
+        def expected = MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
+        def poc = new PoC(expectedFile)
+        def actual = poc.samples
+        assert expected == actual
+    }
+
+    @Test
+    void testDecodingExternal() {
         def expectedFile = new File("$tempDir/expected.wav")
         def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
         def expected = MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
