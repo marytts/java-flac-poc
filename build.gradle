@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     compile localGroovy()
-    compile files('libs/justFlac.jar')
+    compile project(':jflac')
     compile 'de.dfki.mary:marytts-signalproc:5.1.2'
     testCompile 'org.testng:testng:6.9.10'
     testCompile 'de.dfki.mary:marytts-signalproc:5.1.2'
@@ -56,4 +56,22 @@ test {
 task runScript (dependsOn: 'classes', type: JavaExec) {
     main = 'Main'
     classpath = sourceSets.main.runtimeClasspath
+}
+
+subprojects{
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(':jflac'){
+    apply plugin: 'java'
+    group = ''
+    version = '1.4.0'
+
+    repositories{
+        mavenCentral()
+    }
 }
