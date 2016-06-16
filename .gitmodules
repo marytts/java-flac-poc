@@ -1,0 +1,3 @@
+[submodule "jflac"]
+	path = jflac
+	url = git@github.com:nguillaumin/jflac.git
