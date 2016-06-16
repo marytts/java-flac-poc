@@ -2,12 +2,17 @@ plugins {
     id 'groovy'
 }
 
+apply plugin: 'application'
+mainClassName = ""
+
 repositories {
     jcenter()
 }
 
 dependencies {
     compile localGroovy()
+    compile files('libs/justFlac.jar')
+    compile 'de.dfki.mary:marytts-signalproc:5.1.2'
     testCompile 'org.testng:testng:6.9.10'
     testCompile 'de.dfki.mary:marytts-signalproc:5.1.2'
 }
@@ -46,4 +51,9 @@ test {
         test, result -> println "Executing test ${test.name} [${test.className}] with result: ${result.resultType}"
     }
 
+}
+
+task runScript (dependsOn: 'classes', type: JavaExec) {
+    main = 'Main'
+    classpath = sourceSets.main.runtimeClasspath
 }
