@@ -12,7 +12,7 @@ repositories {
 dependencies {
     compile localGroovy()
     compile project(':jflac')
-    compile project('jflac:jflac-codec')
+    compile project(':jflac:jflac-codec')
     compile 'de.dfki.mary:marytts-signalproc:5.1.2'
     testCompile 'org.testng:testng:6.9.10'
     testCompile 'de.dfki.mary:marytts-signalproc:5.1.2'
@@ -89,7 +89,7 @@ project(':jflac'){
     }
 }
 
-project('jflac:jflac-codec'){
+project(':jflac:jflac-codec'){
     apply plugin: 'java'
     group = 'jflac.jaflac-codec'
     version = '1.4.0'
