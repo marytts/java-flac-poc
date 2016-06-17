@@ -1,15 +1,14 @@
 import groovy.util.logging.Log
+import marytts.util.data.audio.MaryAudioUtils
 import org.kc7bfi.jflac.FLACDecoder
 import org.kc7bfi.jflac.PCMProcessor
 import org.kc7bfi.jflac.metadata.StreamInfo
 import org.kc7bfi.jflac.util.ByteData
 import org.kc7bfi.jflac.util.WavWriter
-
-import java.util.logging.Level
+import javax.sound.sampled.AudioSystem
 
 @Log
 class PoC implements PCMProcessor{
-    def samples
     def inputStream
     def outputStream
     WavWriter wav
@@ -28,32 +27,31 @@ class PoC implements PCMProcessor{
         decoder.decode()
     }
 
-    double[] getSamples() {
+    double[] getSamples(File outputFile) {
         log.warning "$this should be decoding the samples!"
-
+        def actualAIS = AudioSystem.getAudioInputStream(outputFile)
+        def actual = MaryAudioUtils.getSamplesAsDoubleArray(actualAIS)
+        return actual
     }
 
     @Override
     void processStreamInfo(StreamInfo streamInfo) {
         log.info("Writing Stream Information")
-        this.wav.writeHeader(streamInfo)
-
+        try {
+            this.wav.writeHeader(streamInfo)
+        }catch (IOException io){
+            io.printStackTrace()
+        }
     }
 
     @Override
     void processPCM(ByteData pcm) {
         log.info("Adding PCM")
-        this.wav.writePCM(pcm)
+        try {
+            this.wav.writePCM(pcm)
+        }catch (IOException io){
+            io.printStackTrace()
+        }
     }
 }
 
-class Main{
-    def static tempDir = new File(System.getProperty('user.dir'))
-    public static void main(String[] args){
-        def flac = new File("$tempDir/src/test/resources/sample1.flac")
-        def wav = new File("$tempDir/src/test/resources/sample1_out.wav")
-        PoC poc = new PoC(flac)
-        poc.decode(wav)
-
-    }
-}
