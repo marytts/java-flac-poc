@@ -12,12 +12,11 @@ class PoC implements PCMProcessor{
     def samples
     def inputStream
     def outputStream
-    def wav
+    WavWriter wav
 
     PoC(File inputFile) {
-        log.info("Loading FLAC file")
+        log.warning "$this should be loading $inputFile"
         this.inputStream = new FileInputStream(inputFile)
-        log.warning "$this should be loading $file"
     }
 
     def decode(File outputFile){
@@ -37,14 +36,14 @@ class PoC implements PCMProcessor{
     @Override
     void processStreamInfo(StreamInfo streamInfo) {
         log.info("Writing Stream Information")
-        this.wav.writHeader(streamInfo)
+        this.wav.writeHeader(streamInfo)
 
     }
 
     @Override
     void processPCM(ByteData pcm) {
         log.info("Adding PCM")
-        this.wav.addPCM(pcm)
+        this.wav.writePCM(pcm)
     }
 }
 
