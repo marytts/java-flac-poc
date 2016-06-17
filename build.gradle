@@ -2,14 +2,38 @@ plugins {
     id 'groovy'
 }
 
+apply plugin: 'application'
+mainClassName = ""
+
 repositories {
     jcenter()
 }
 
 dependencies {
     compile localGroovy()
+    compile project(':jflac')
+    compile project(':jflac:jflac-codec')
+    compile 'de.dfki.mary:marytts-signalproc:5.1.2'
     testCompile 'org.testng:testng:6.9.10'
     testCompile 'de.dfki.mary:marytts-signalproc:5.1.2'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir 'src/main/groovy'
+        }
+    }
+
+    test {
+        groovy{
+            srcDir 'src/test/groovy'
+        }
+
+        resources{
+            srcDir 'src/test/resources'
+        }
+    }
 }
 
 test {
@@ -23,5 +47,58 @@ test {
             from sourceSets.test.output.resourcesDir
             into temporaryDir
         }
+    }
+    afterTest {
+        test, result -> println "Executing test ${test.name} [${test.className}] with result: ${result.resultType}"
+    }
+
+}
+
+task runScript (dependsOn: 'classes', type: JavaExec) {
+    main = 'Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+subprojects{
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(':jflac'){
+    apply plugin: 'java'
+    version = '1.4.0'
+
+    repositories{
+        mavenCentral()
+    }
+
+    dependencies{
+        compile group: 'org.apache.maven.plugins', name: 'maven-site-plugin', version: '2.1.1'
+        compile group: 'org.apache.maven.plugins', name: 'maven-pmd-plugin', version: '2.5'
+        compile group: 'org.apache.maven.plugins', name: 'maven-compiler-plugin', version: '2.3.2'
+        compile group: 'org.apache.maven.plugins', name: 'maven-javadoc-plugin', version: '2.7'
+        compile group: 'org.apache.maven.plugins', name: 'maven-changelog-plugin', version: '2.2'
+        compile group: 'org.apache.maven.plugins', name: 'maven-changes-plugin', version: '2.3'
+        compile group: 'org.apache.maven.plugins', name: 'maven-jxr-plugin', version: '2.2'
+        compile group: 'org.codehaus.mojo', name: 'jdepend-maven-plugin', version: '2.0'
+        compile group: 'org.codehaus.mojo', name: 'taglist-maven-plugin', version: '2.4'
+
+    }
+}
+
+project(':jflac:jflac-codec'){
+    apply plugin: 'java'
+    group = 'jflac.jaflac-codec'
+    version = '1.4.0'
+
+    repositories{
+        mavenCentral()
+    }
+
+    dependencies{
+        compile group: 'junit', name: 'junit', version: '4.8.2'
     }
 }
