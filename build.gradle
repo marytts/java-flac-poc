@@ -28,6 +28,8 @@ test {
 }
 
 project(':jflac:jflac-codec') {
+    buildDir = file("$rootProject.buildDir/$it.name")
+
     apply plugin: 'java'
 
     group = 'jflac.jaflac-codec'
