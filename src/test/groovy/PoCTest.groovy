@@ -12,14 +12,19 @@ class PoCTest {
         tempDir = new File(System.getProperty('tempDir'))
     }
 
-    @Test(expectedExceptions = PowerAssertionError.class)
+    @Test
     void testDecoding() {
         def expectedFile = new File("$tempDir/expected.wav")
         def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
         def expected = MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
-        def poc = new PoC(expectedFile)
-        def actual = poc.samples
+        def actualFile = new File("$tempDir/actual.wav")
+        def inputFile = new File("$tempDir/test.flac")
+        def poc = new PoC(inputFile)
+        poc.decode(actualFile)
+        assert actualFile.exists()
+        def actual = poc.getSamples(actualFile)
         assert expected == actual
+
     }
 
     @Test
@@ -27,9 +32,9 @@ class PoCTest {
         def expectedFile = new File("$tempDir/expected.wav")
         def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
         def expected = MaryAudioUtils.getSamplesAsDoubleArray(expectedAIS)
-        def proc = 'sox test.flac actual.wav'.execute(null, tempDir)
+        def proc = 'sox test.flac actual-external.wav'.execute(null, tempDir)
         proc.waitFor()
-        def actualFile = new File("$tempDir/actual.wav")
+        def actualFile = new File("$tempDir/actual-external.wav")
         assert actualFile.exists()
         def actualAIS = AudioSystem.getAudioInputStream(actualFile)
         def actual = MaryAudioUtils.getSamplesAsDoubleArray(actualAIS)

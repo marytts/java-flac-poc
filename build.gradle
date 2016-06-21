@@ -9,8 +9,8 @@ repositories {
 dependencies {
     compile localGroovy()
     compile project(':jflac:jflac-codec')
+    compile 'de.dfki.mary:marytts-signalproc:5.1.2'
     testCompile 'org.testng:testng:6.9.10'
-    testCompile 'de.dfki.mary:marytts-signalproc:5.1.2'
 }
 
 test {
