@@ -12,7 +12,7 @@ class PoCTest {
         tempDir = new File(System.getProperty('tempDir'))
     }
 
-    @Test(expectedExceptions = PowerAssertionError.class)
+    @Test
     void testDecoding() {
         def expectedFile = new File("$tempDir/expected.wav")
         def expectedAIS = AudioSystem.getAudioInputStream(expectedFile)
