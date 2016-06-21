@@ -1,4 +1,3 @@
-
 import groovy.util.logging.Log
 import marytts.util.data.audio.MaryAudioUtils
 
@@ -12,7 +11,7 @@ import org.kc7bfi.jflac.util.WavWriter
 import javax.sound.sampled.AudioSystem
 
 @Log
-class PoC implements PCMProcessor{
+class PoC implements PCMProcessor {
     def inputStream
     def outputStream
     WavWriter wav
@@ -22,7 +21,7 @@ class PoC implements PCMProcessor{
         this.inputStream = new FileInputStream(inputFile)
     }
 
-    def decode(File outputFile){
+    def decode(File outputFile) {
         log.info("Setting up decoder")
         this.outputStream = new FileOutputStream(outputFile)
         this.wav = new WavWriter(outputStream)
@@ -43,7 +42,7 @@ class PoC implements PCMProcessor{
         log.info("Writing Stream Information")
         try {
             this.wav.writeHeader(streamInfo)
-        }catch (IOException io){
+        } catch (IOException io) {
             io.printStackTrace()
         }
     }
@@ -53,9 +52,8 @@ class PoC implements PCMProcessor{
         log.info("Adding PCM")
         try {
             this.wav.writePCM(pcm)
-        }catch (IOException io){
+        } catch (IOException io) {
             io.printStackTrace()
         }
     }
 }
-
